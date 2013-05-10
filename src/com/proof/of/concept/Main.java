@@ -1,3 +1,4 @@
+package com.proof.of.concept;
 import java.util.Scanner;
 
 public class Main {
