@@ -60,7 +60,7 @@ public class Service {
 	}
 
 	/**
-	 * Retrieve the dang image.
+	 * Retrieve the dang image/Save its!.
 	 * 
 	 * @param id
 	 *            _id from MongoDB
