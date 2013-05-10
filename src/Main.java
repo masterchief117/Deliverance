@@ -2,6 +2,10 @@ import java.util.Scanner;
 
 public class Main {
 
+	private static final String INSERT_FILE_MySQL = "Insert file into MySQL id ";
+	private static final String INSERT_FILE_MongoDB = "Insert file into MongoDB ";
+	private static final String SAVE_FILE = "Retrive and save file ";
+
 	/**
 	 * Run as a java application
 	 * 
@@ -24,15 +28,15 @@ public class Main {
 		String userInputOfFileLocation = input.nextLine();
 		// returns a boolean if it worked. Will crash on false, do not expect to
 		// see it.
-		System.out.println("Insert picture into MySQL id = "
+		System.out.println(INSERT_FILE_MySQL
 				+ service.insertFileIntoMySQL(userInputOfFileLocation));
 		// grab the id!
 		Object id = service.pushToMongDB();
 		// shows the _id of the file inserted
-		System.out.println("Insert picture into MongoDB " + id);
+		System.out.println(INSERT_FILE_MongoDB + id);
 		// returns a boolean if it worked. Will crash on false. So don't expect
 		// to see it.
-		System.out.println("Retrive and save file "
+		System.out.println(SAVE_FILE
 				+ service.retrieveImage(id, userInputOfFileLocation));
 	}
 }

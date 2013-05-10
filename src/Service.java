@@ -5,6 +5,8 @@ public class Service {
 	private static Service service;
 	private Dao dao;
 
+	private static final String PERIOD = ".";
+
 	/**
 	 * Singleton
 	 * 
@@ -69,7 +71,7 @@ public class Service {
 	public boolean retrieveImage(Object id, String fileLocation) {
 		String fileExtension = fileLocation.trim();
 
-		int startOfFileExtension = fileExtension.lastIndexOf(".");
+		int startOfFileExtension = fileExtension.lastIndexOf(PERIOD);
 		// in case there is no extension.
 		if (startOfFileExtension == -1) {
 			startOfFileExtension = fileExtension.length();

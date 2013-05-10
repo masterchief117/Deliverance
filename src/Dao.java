@@ -16,11 +16,21 @@ import com.mongodb.gridfs.*;
 public class Dao {
 
 	private static Dao dao;
+
 	private static final String URL_TO_SERVER = "jdbc:mysql://localhost/image_test?"
 			+ "user=root&password=root";
 	private static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String GRAB_LAST_IMAGE = "SELECT image FROM image_test.pictures ORDER BY idpictures DESC LIMIT 1";
 	private static final String DIRECTORY_LOCATION = "c:/temp/temp/";
+	private static final String INSERT_FILE = "insert into image_test.pictures (image) VALUES ( ? )";
+	private static final String MONGO_DB_SERVER_NAME = "localhost";
+	private static final String MONGO_DB_INSTANCE_NAME = "image_test";
+	private static final String MONGO_DB_ID = "_id";
+
+	private static final int MONGO_DB_SERVER_PORT = 27017;
+	private static final int LARGE_NUMBER = 10000000;
+	private static final int FIRST_LOCATION = 1;
+
 	private MongoClient client;
 	private Connection connection;
 	private PreparedStatement statement;
@@ -83,9 +93,10 @@ public class Dao {
 			// Grabbing the image from the DB using getInputStream()
 			InputStream stream = getImageFromSQL();
 			// create a new MongoClient
-			client = new MongoClient(new ServerAddress("localhost", 27017));
+			client = new MongoClient(new ServerAddress(MONGO_DB_SERVER_NAME,
+					MONGO_DB_SERVER_PORT));
 			// create the db (or get it)
-			DB db = client.getDB("image_test");
+			DB db = client.getDB(MONGO_DB_INSTANCE_NAME);
 			// create a new GridFS (used for documents of non-BSON type)
 			GridFS fs = new GridFS(db);
 			// grab the file;
@@ -94,13 +105,15 @@ public class Dao {
 			in.save();
 			// gets the _id of the file ya just saved!
 			id = in.getId();
-			// close all the connections you made with getImageFromSQL
-			closeMySQL();
 		}
 
 		catch (Exception e) {
 			e.printStackTrace();
-			id = 0;
+			id = null;
+		} finally {
+
+			// close all the connections you made with getImageFromSQL
+			closeMySQL();
 		}
 		return id;
 	}
@@ -117,21 +130,20 @@ public class Dao {
 		boolean success;
 		try {
 			// setup client server, will change this as I find best practice
-			client = new MongoClient(new ServerAddress("localhost", 27017));
+			client = new MongoClient(new ServerAddress(MONGO_DB_SERVER_NAME,
+					MONGO_DB_SERVER_PORT));
 			// create or get DB
-			DB db = client.getDB("image_test");
+			DB db = client.getDB(MONGO_DB_INSTANCE_NAME);
 			// create new instance of GridFS, needed for documents (not BSON)
 			GridFS fs = new GridFS(db);
 			// grab the object to save
-			GridFSDBFile save = fs.findOne(new BasicDBObject("_id", id));
+			GridFSDBFile save = fs.findOne(new BasicDBObject(MONGO_DB_ID, id));
 			// create the file (this will just assign a random
 			// 2342323232354.yourFileExtensionFromBefore
 			FileOutputStream out = new FileOutputStream(DIRECTORY_LOCATION
-					+ (int) (Math.random() * 1000000) + fileExtension);
+					+ (int) (Math.random() * LARGE_NUMBER) + fileExtension);
 			// SAVES THE FILE, called from GriFSDBFile, uses FileOutputStream
 			save.writeTo(out);
-			// close the FileOutputStream
-			out.close();
 			success = true;
 		} catch (Exception e) {
 
@@ -155,11 +167,11 @@ public class Dao {
 			throws Exception {
 		// setup the connection to grab the latest file (the one you just placed
 		// in there!)
-		statement = connection
-				.prepareStatement("insert into image_test.pictures (image) VALUES ( ? )");
+		statement = connection.prepareStatement(INSERT_FILE);
 		// and slam it into the stream. Might want to move the execute to after
 		// this method. But oh wells.
-		statement.setBinaryStream(1, stream, (int) fileToInsert.length());
+		statement.setBinaryStream(FIRST_LOCATION, stream,
+				(int) fileToInsert.length());
 	}
 
 	/**
