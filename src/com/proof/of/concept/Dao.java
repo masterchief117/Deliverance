@@ -19,15 +19,15 @@ public class Dao {
 
 	private static Dao dao;
 
-	private static final String URL_TO_SERVER = "jdbc:mysql://192.168.0.81/temp_file?"
-			+ "user=root&password=root";
+	private static final String URL_TO_SERVER = "jdbc:mysql://192.168.0.44/temp_file?"
+			+ "user=ubuntu&password=ubuntu";
 	private static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String GRAB_LAST_IMAGE = "SELECT file FROM temp_file.files ORDER BY idfiles DESC LIMIT 1";
 	private static final String DIRECTORY_LOCATION = "c:/temp/temp/";
 	private static final String INSERT_FILE = "insert into temp_file.files (file) VALUES ( ? )";
 	private static final String MONGO_DB_INSTANCE_NAME = "file_test";
 	private static final String MONGO_DB_ID = "_id";
-	private static final String MONGO_DB_SERVER_NAME = "192.168.0.81";
+	private static final String MONGO_DB_SERVER_NAME = "192.168.0.44";
 
 	private static final int MONGO_DB_SERVER_PORT = 27017;
 	private static final int LARGE_NUMBER = 10000000;
