@@ -1,0 +1,18 @@
+CENTOS 6.4 User info
+root 		CentosNoSQL
+Username 	CentosUser
+oracle		Orac1e
+
+Oracle Info
+Listener = LISTENER
+port = 1521
+Oracle SID= MongoDemo
+
+Oracle User info
+SYS			MongoOraDB1
+SYSTEM		MongoOraDB1
+DBSNMP		MongoOraDB1
+SYSMAN		MongoOraDB1
+hr			hr
+oe			oe
+pm			pm
