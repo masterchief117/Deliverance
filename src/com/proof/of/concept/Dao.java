@@ -4,17 +4,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.net.UnknownHostException;
+import java.sql.*;
+
+import oracle.jdbc.driver.OracleDriver;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.mongodb.gridfs.*;
+
+//import com.mysql.jdbc.Statement;
 
 public class Dao {
 
@@ -237,20 +239,46 @@ public class Dao {
 	 * @return
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
+	 * @throws UnknownHostException
 	 */
 	public boolean oracleConnection() throws SQLException,
-			ClassNotFoundException {
+			ClassNotFoundException, UnknownHostException {
 
-		Class.forName(Oracle_Driver);
-		connection = DriverManager.getConnection(URL_TO_ORACLE_DB,
+		DriverManager.registerDriver(new OracleDriver());
+		Connection conn = DriverManager.getConnection(URL_TO_ORACLE_DB,
 				ORACLE_USERNAME, ORACLE_PASSWORD);
-		statement = connection.prepareStatement("Select * FROM Departments");
-		return statement.execute();
+		Statement statements = conn.createStatement();
+		ResultSet results = statements
+				.executeQuery("Select * FROM Departments");
+		results.next();
+		@SuppressWarnings("unused")
+		int row = results.getInt(1);
+		String rowTwo = results.getString(2);
+		System.out.print(row);
+
+		closeMySQL();
+		pushIntoMongo();
+		return true;
 	}
 
-	public boolean pushIntoMongo() {
-		client.
-		
+	public boolean pushIntoMongo() throws UnknownHostException,
+			ClassNotFoundException, SQLException {
+		client = new MongoClient(MONGO_DB_SERVER_NAME, MONGO_DB_SERVER_PORT);
+
+		connection = DriverManager.getConnection(URL_TO_ORACLE_DB,
+				ORACLE_USERNAME, ORACLE_PASSWORD);
+		Statement statement = connection.createStatement();
+		ResultSet results = statement.executeQuery("SELECT * FROM DEPARTMENTS");
+		results.next();
+		results.next();
+		long department = results.getInt(1);
+		String depart = results.getString(2);
+		DB db = client.getDB("Stachers");
+		DBCollection collection = db.getCollection("second");
+		BasicDBObject ob = new BasicDBObject("departmentId", department)
+				.append("Department", depart);
+		collection.insert(ob);
+		closeMySQL();
 		return true;
 
 	}
