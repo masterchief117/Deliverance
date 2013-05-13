@@ -56,7 +56,7 @@ public class Service {
 	 */
 	public Object pushToMongDB() {
 
-		return dao.pushToMongoDB();
+		return dao.pushMySQLToMongoDB();
 	}
 
 	/**

@@ -1,4 +1,5 @@
 package com.proof.of.concept;
+
 import java.util.Scanner;
 
 public class Main {
@@ -15,8 +16,18 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		Main main = new Main();
-		main.gatherInput(input);
+		main.testInput();
 		input.close();
+	}
+
+	private void testInput() {
+		Dao dao = Dao.getInstance();
+		try {
+			System.out.print(dao.oracleConnection());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**

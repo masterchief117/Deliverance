@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -19,15 +20,19 @@ public class Dao {
 
 	private static Dao dao;
 
-	private static final String URL_TO_SERVER = "jdbc:mysql://ubuntu-NoSQL/temp_file?"
+	private static final String URL_TO_SERVER = "jdbc:mysql://192.168.0.44/temp_file?"
 			+ "user=ubuntu&password=ubuntu";
 	private static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String GRAB_LAST_IMAGE = "SELECT file FROM temp_file.files ORDER BY idfiles DESC LIMIT 1";
+	private static final String Oracle_Driver = "oracle.jdbc.driver.OracleDriver";
+	private static final String ORACLE_USERNAME = "hr";
+	private static final String ORACLE_PASSWORD = "hr";
+	private static final String URL_TO_ORACLE_DB = "jdbc:oracle:thin:@192.168.0.44:1521:MongoDemo";
+	private static final String GRAB_LAST_IMAGE = "SELECT Department_Id FROM DEPARTMENTS WHERE DEPARTMENT_ID = 10";
 	private static final String DIRECTORY_LOCATION = "c:/temp/temp/";
 	private static final String INSERT_FILE = "insert into temp_file.files (file) VALUES ( ? )";
 	private static final String MONGO_DB_INSTANCE_NAME = "file_test";
 	private static final String MONGO_DB_ID = "_id";
-	private static final String MONGO_DB_SERVER_NAME = "ubuntu-NoSQL";
+	private static final String MONGO_DB_SERVER_NAME = "192.168.0.44";
 
 	private static final int MONGO_DB_SERVER_PORT = 27017;
 	private static final int LARGE_NUMBER = 10000000;
@@ -89,7 +94,7 @@ public class Dao {
 	 * @param fileLocation
 	 * @return
 	 */
-	public Object pushToMongoDB() {
+	public Object pushMySQLToMongoDB() {
 		Object id;
 		try {
 			// Grabbing the image from the DB using getInputStream()
@@ -225,5 +230,28 @@ public class Dao {
 			success = false;
 		}
 		return success;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
+	public boolean oracleConnection() throws SQLException,
+			ClassNotFoundException {
+
+		Class.forName(Oracle_Driver);
+		connection = DriverManager.getConnection(URL_TO_ORACLE_DB,
+				ORACLE_USERNAME, ORACLE_PASSWORD);
+		statement = connection.prepareStatement("Select * FROM Departments");
+		return statement.execute();
+	}
+
+	public boolean pushIntoMongo() {
+		client.
+		
+		return true;
+
 	}
 }
