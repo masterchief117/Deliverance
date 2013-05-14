@@ -16,3 +16,9 @@ SYSMAN		MongoOraDB1
 hr			hr
 oe			oe
 pm			pm
+
+Mongo Database
+Currently hosted on 192.168.0.44
+You do not need to specifiy the port to connect.
+Using Stachers database.
+from CLI, 'show dbs' will show all databases.
