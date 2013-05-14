@@ -1,6 +1,7 @@
 package com.proof.of.concept;
 
 import java.util.Scanner;
+import dummy.data.Dao;
 
 public class Main {
 
