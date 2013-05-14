@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
 import oracle.jdbc.driver.OracleDriver;
+
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
@@ -28,10 +30,13 @@ public abstract class Dao {
 	// results from a Query are stored in a ResultSet
 	private ResultSet result;
 
-	// Creates a conne
+	// Creates a connection to MongoClient
 	private MongoClient mongoClient;
+	// Set Database for mongoDb
 	private DB mongoDb;
+	// Set GridFs for Mongo
 	private GridFS gridFs;
+	// set GridFSInputFile for Mongo
 	private GridFSInputFile gridFsInputFile;
 
 	/**
